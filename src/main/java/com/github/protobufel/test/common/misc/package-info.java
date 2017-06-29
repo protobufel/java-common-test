@@ -17,19 +17,21 @@
 
 /**
  * This package provides some common AssertJ assertions and other test utilities.
+ *
  * <p>
+ *
  * <pre>
  *
- import static com.github.protobufel.test.common.misc.CommonAssertions;
-
- class MyTest {
- ...
- {@literal @}Test
- public void testSomething() {
- assertThatType(MyUtilityClass.class).isUtilityClass();
- }
- ...
- }
+ * import static com.github.protobufel.test.common.misc.CommonAssertions;
+ *
+ * class MyTest {
+ * ...
+ * {@literal @}Test
+ * public void testSomething() {
+ * assertThatType(MyUtilityClass.class).isUtilityClass();
+ * }
+ * ...
+ * }
  * </pre>
  *
  * @author David Tesler

@@ -46,8 +46,8 @@ public class UtilityClassAssert extends AbstractClassAssert<UtilityClassAssert> 
     }
 
     /**
-     * Checks whether the subject under the test is the proper utility class, and if it is,
-     * then also accesses its private constructor to bump the class coverage.
+     * Checks whether the subject under the test is the proper utility class, and if it is, then also
+     * accesses its private constructor to bump the class coverage.
      */
     public UtilityClassAssert isUtilityClass() {
         is(getUtilityCondition());
@@ -112,8 +112,8 @@ public class UtilityClassAssert extends AbstractClassAssert<UtilityClassAssert> 
         } finally {
             if ((pConstructor != null) && accessible.isPresent()) {
                 pConstructor.setAccessible(accessible.get());
-            }
-        }
+      }
+    }
 
     return false;
   }

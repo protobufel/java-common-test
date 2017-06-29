@@ -22,9 +22,12 @@ import org.assertj.core.api.Condition;
 import org.assertj.core.condition.AllOf;
 import org.assertj.core.condition.Not;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * An AssertJ compliant assertion class verifying whether the subject under the test is the proper
@@ -47,6 +50,7 @@ public class UtilityClassAssert extends AbstractClassAssert<UtilityClassAssert> 
      */
     public UtilityClassAssert isUtilityClass() {
         is(getUtilityCondition());
+        touchPrivateConstructor(actual);
         return this;
     }
 
@@ -83,4 +87,33 @@ public class UtilityClassAssert extends AbstractClassAssert<UtilityClassAssert> 
                                         .allMatch(constructor -> Modifier.isPrivate(constructor.getModifiers())),
                         "with only private constructor"));
     }
+
+    private final boolean touchPrivateConstructor(Class<?> clazz) {
+        Constructor<?> pConstructor = null;
+        Optional<Boolean> accessible = Optional.empty();
+
+        try {
+            pConstructor = clazz.getDeclaredConstructor();
+
+            if (!Modifier.isPrivate(pConstructor.getModifiers())) {
+                return false;
+            }
+
+            accessible = Optional.of(pConstructor.isAccessible());
+            pConstructor.setAccessible(true);
+            pConstructor.newInstance();
+            pConstructor.setAccessible(accessible.get());
+            return true;
+        } catch (NoSuchMethodException
+                | IllegalAccessException
+                | InstantiationException
+                | InvocationTargetException e) {
+        } finally {
+            if ((pConstructor != null) && accessible.isPresent()) {
+                pConstructor.setAccessible(accessible.get());
+            }
+        }
+
+    return false;
+  }
 }

@@ -21,8 +21,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.lang.reflect.Constructor;
-
 import static com.github.protobufel.test.common.misc.CommonAssertions.assertThatType;
 
 public class CommonAssertionsTest {
@@ -37,8 +35,5 @@ public class CommonAssertionsTest {
     @Test
     public void testAsUtilityClass() throws Exception {
         assertThatType(CommonAssertions.class).isUtilityClass();
-        final Constructor<CommonAssertions> pConstructor = CommonAssertions.class.getDeclaredConstructor();
-        pConstructor.setAccessible(true);
-        //pConstructor.newInstance();
     }
 }

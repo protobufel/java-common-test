@@ -64,12 +64,12 @@ if (project.hasProperty('ossrhUsername')) {
                     name 'java-common-test'
                     packaging 'jar'
                     description 'Java 8 Common Utilities'
-                    url 'https://github.com/protobufel/common-java'
+                    url 'https://github.com/protobufel/java-common-test'
 
                     scm {
-                        connection 'scm:git:https://github.com/protobufel/common-java.git'
-                        developerConnection 'scm:git@github.com:protobufel/common-java.git'
-                        url 'https://github.com/protobufel/common-java'
+                        connection 'scm:git:https://github.com/protobufel/java-common-test.git'
+                        developerConnection 'scm:git@github.com:protobufel/java-common-test.git'
+                        url 'https://github.com/protobufel/java-common-test'
                     }
 
                     licenses {

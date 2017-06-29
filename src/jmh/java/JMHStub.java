@@ -21,13 +21,16 @@ import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @Warmup(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 @Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 @Fork(1)
 @State(Scope.Benchmark)
-public class JMHMultiKeyMapVsMap {
+public class JMHStub {
 
     @Param({"1000"})
     public int readContainerSize = 1000;
@@ -58,7 +61,7 @@ public class JMHMultiKeyMapVsMap {
     }
 
     @Benchmark()
-    public Integer baseline_helloWorld() {
+    public String baseline_helloWorld() {
         return "Hello World!";
     }
 }

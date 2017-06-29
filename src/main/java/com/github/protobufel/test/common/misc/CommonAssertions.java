@@ -24,6 +24,9 @@ package com.github.protobufel.test.common.misc;
  */
 public final class CommonAssertions {
 
+    private CommonAssertions() {
+    }
+
     /**
      * Initiates the flow of the utility class assertions.
      *

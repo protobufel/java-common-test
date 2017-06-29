@@ -19,6 +19,21 @@ package com.github.protobufel.test.common.misc;
 
 /**
  * Additional common assertions.
+ * <p>Usage:
+ * <pre>
+ * {@code
+ *
+import static com.github.protobufel.test.common.misc.CommonAssertions;
+
+class MyTest {
+...
+@Test public void testSomething() {
+assertThatType(MyUtilityClass.class).isUtilityClass();
+}
+...
+}
+ * }
+ * </pre>
  *
  * @author David Tesler
  */

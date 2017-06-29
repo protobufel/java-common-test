@@ -1,0 +1,216 @@
+/*
+ *    Copyright 2017 David Tesler
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ *
+ */
+
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+        //maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }
+    }
+}
+
+plugins {
+    id 'java-library'
+    id 'maven'
+    id 'signing'
+
+    id 'io.codearte.nexus-staging' version "0.9.0"
+    id 'net.researchgate.release' version '2.6.0'
+
+    //id 'eclipse'
+    id "me.champeau.gradle.jmh" version "0.4.2"
+
+    id 'jacoco'
+}
+
+//plugins.withType(EclipsePlugin) {
+//  project.eclipse.classpath.plusConfigurations += [ configurations.jmh ]
+//}
+
+group = 'com.github.protobufel'
+archivesBaseName = 'java-common-test'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+if (project.hasProperty('ossrhUsername')) {
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+                repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                    authentication(userName: ossrhUsername, password: ossrhPassword)
+                }
+
+                snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                    authentication(userName: ossrhUsername, password: ossrhPassword)
+                }
+
+                pom.project {
+                    name 'java-common-test'
+                    packaging 'jar'
+                    description 'Java 8 Common Utilities'
+                    url 'https://github.com/protobufel/common-java'
+
+                    scm {
+                        connection 'scm:git:https://github.com/protobufel/common-java.git'
+                        developerConnection 'scm:git@github.com:protobufel/common-java.git'
+                        url 'https://github.com/protobufel/common-java'
+                    }
+
+                    licenses {
+                        license {
+                            name 'The Apache License, Version 2.0'
+                            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id 'protobufel'
+                            name 'David Tesler'
+                            email 'protobufel@gmail.com'
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    nexusStaging {
+        //packageGroup = "com.github.protobufel.java-common-test" //optional if packageGroup == project.getGroup()
+        stagingProfileId = "com.github.protobufel" //when not defined will be got from server using "packageGroup"
+    }
+
+    task sourcesJar(type: Jar) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    signing {
+        sign configurations.archives
+    }
+
+    task javadocJar(type: Jar) {
+        classifier = 'javadoc'
+        from javadoc
+    }
+
+    if (project.hasProperty("release") && (release == true)) {
+        javadoc {
+            finalizedBy = ["copyJavadocToDoc"]
+        }
+
+        task copyJavadocToDoc(type: Sync) {
+            from javadoc
+            into("docs/javadoc")
+        }
+    }
+
+    artifacts {
+        archives javadocJar, sourcesJar
+    }
+
+    release {
+        preCommitText = ''
+        preTagCommitMessage = 'pre tag commit: '
+        tagCommitMessage = 'bumped to '
+        newVersionCommitMessage = 'new version commit: '
+//        tagTemplate = "${version}"
+    }
+
+    afterReleaseBuild.dependsOn uploadArchives
+} else {
+    test {
+        testLogging {
+            events "PASSED", "FAILED", "SKIPPED"
+            exceptionFormat "short"
+
+            debug {
+                events "skipped", "failed"
+                exceptionFormat "full"
+            }
+
+            info.events = ["failed", "skipped"]
+        }
+    }
+}
+
+jar {
+    manifest {
+        attributes('Implementation-Title': project.name,
+                'Implementation-Version': project.version)
+    }
+}
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+jmh {
+    jmhVersion = '1.19' // Specifies JMH version
+    includeTests = false
+    // Allows to include test sources into generate JMH jar, i.e. use it when benchmarks depend on the test classes.
+    duplicateClassesStrategy = 'FAIL'
+    // Strategy to apply when encountring duplicate classes during creation of the fat jar (i.e. while executing jmhJar task)
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.5
+            }
+        }
+
+        rule {
+            enabled = false
+            element = 'CLASS'
+            includes = ['com.github.protobufel.*']
+
+            limit {
+                counter = 'LINE'
+                value = 'TOTALCOUNT'
+                maximum = 0.3
+            }
+        }
+    }
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled false
+    }
+}
+
+check.dependsOn jacocoTestReport
+
+dependencies {
+    //api '...'
+
+    //implementation 'junit:junit:4.12'
+    implementation 'org.assertj:assertj-core:3.8.0'
+
+    // Use JUnit test framework
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.assertj:assertj-core:3.8.0'
+    testImplementation 'com.google.guava:guava:22.0'
+    testImplementation 'com.google.guava:guava-testlib:22.0'
+    testImplementation 'pl.pragmatists:JUnitParams:1.1.0'
+}

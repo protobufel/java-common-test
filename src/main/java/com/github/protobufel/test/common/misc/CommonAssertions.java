@@ -17,7 +17,18 @@
 
 package com.github.protobufel.test.common.misc;
 
+/**
+ * Additional common assertions.
+ *
+ * @author David Tesler
+ */
 public final class CommonAssertions {
+
+    /**
+     * Initiates the flow of the utility class assertions.
+     *
+     * @param actual the class to test for being a proper utility class
+     */
     public static <T> UtilityClassAssert assertThatType(Class<? extends T> actual) {
         return new UtilityClassAssert(actual);
     }

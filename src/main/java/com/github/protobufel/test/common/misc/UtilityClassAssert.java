@@ -26,6 +26,12 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Objects;
 
+/**
+ * An AssertJ compliant assertion class verifying whether the subject under the test is the proper
+ * utility class.
+ *
+ * @author David Tesler
+ */
 public class UtilityClassAssert extends AbstractClassAssert<UtilityClassAssert> {
 
     public UtilityClassAssert(Class<?> actual) {
@@ -36,49 +42,23 @@ public class UtilityClassAssert extends AbstractClassAssert<UtilityClassAssert> 
         return new UtilityClassAssert(actual);
     }
 
-    // FIXME: remove after savepoint
-    public UtilityClassAssert isUtilityClassOld() {
-        isNotNull()
-                .isPublic()
-                .isFinal()
-                .isNotInterface()
-                .isNotAnnotation()
-                .is(
-                        new Condition<Class<?>>(
-                                clazz -> !clazz.isMemberClass() || Modifier.isStatic(clazz.getModifiers()),
-                                "top level or static"))
-                .isNot(new Condition<Class<?>>(clazz -> clazz.isAnonymousClass(), "anonymous"))
-                .isNot(new Condition<Class<?>>(clazz -> clazz.isArray(), "array"))
-                .isNot(new Condition<Class<?>>(clazz -> clazz.isEnum(), "enum"))
-                .isNot(new Condition<Class<?>>(clazz -> clazz.isLocalClass(), "local class"))
-                .isNot(new Condition<Class<?>>(clazz -> clazz.isPrimitive(), "primitive"))
-                .isNot(new Condition<Class<?>>(clazz -> clazz.isSynthetic(), "synthetic"))
-                .is(
-                        new Condition<Class<?>>(
-                                clazz -> clazz.getConstructors().length == 0, "with public constructors"))
-                .is(
-                        new Condition<Class<?>>(
-                                clazz -> clazz.getDeclaredConstructors().length == 1, "with only one constructor"))
-                .is(
-                        new Condition<Class<?>>(
-                                clazz ->
-                                        Arrays.stream(clazz.getDeclaredConstructors())
-                                                .allMatch(constructor -> Modifier.isPrivate(constructor.getModifiers())),
-                                "with only private constructor"));
-        return this;
-    }
-
+    /**
+     * Checks whether the subject under the test is the proper utility class.
+     */
     public UtilityClassAssert isUtilityClass() {
         is(getUtilityCondition());
         return this;
     }
 
+    /**
+     * Checks whether the subject under the test is not the proper utility class.
+     */
     public UtilityClassAssert isNotUtilityClass() {
         isNot(getUtilityCondition());
         return this;
     }
 
-    private Condition<Class<?>> getUtilityCondition() {
+    protected Condition<Class<?>> getUtilityCondition() {
         return AllOf.allOf(
                 Not.not(new Condition<Class<?>>(clazz -> Objects.isNull(clazz), "null")),
                 new Condition<Class<?>>(clazz -> Modifier.isPublic(clazz.getModifiers()), "public"),

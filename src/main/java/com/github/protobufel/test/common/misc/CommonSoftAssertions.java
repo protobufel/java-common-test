@@ -19,7 +19,18 @@ package com.github.protobufel.test.common.misc;
 
 import org.assertj.core.api.SoftAssertions;
 
+/**
+ * Additional common soft assertions.
+ *
+ * @author David Tesler
+ */
 public class CommonSoftAssertions extends SoftAssertions {
+
+    /**
+     * Initiates the flow of the utility class soft assertions.
+     *
+     * @param actual the class to test for being a proper utility class
+     */
     public UtilityClassAssert assertThatType(Class<?> actual) {
         return proxy(UtilityClassAssert.class, Class.class, actual);
     }

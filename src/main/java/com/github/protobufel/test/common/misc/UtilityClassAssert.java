@@ -46,7 +46,8 @@ public class UtilityClassAssert extends AbstractClassAssert<UtilityClassAssert> 
     }
 
     /**
-     * Checks whether the subject under the test is the proper utility class.
+     * Checks whether the subject under the test is the proper utility class, and if it is,
+     * then also accesses its private constructor to bump the class coverage.
      */
     public UtilityClassAssert isUtilityClass() {
         is(getUtilityCondition());

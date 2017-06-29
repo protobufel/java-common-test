@@ -133,15 +133,6 @@ if (project.hasProperty('ossrhUsername')) {
 //        tagTemplate = "${version}"
     }
 
-    afterReleaseBuild {
-        finalizedBy = ["writeProperties"]
-    }
-
-    task writeProperties(type: WriteProperties) {
-        outputFile 'gradle.properties'
-        property 'release', false
-    }
-
     afterReleaseBuild.dependsOn uploadArchives
 } else {
     test {

@@ -9,7 +9,8 @@
 
  // This package provides some common AssertJ assertions and other test utilities.
 
- import static com.github.protobufel.test.common.misc.CommonAssertions;
+ import static com.github.protobufel.test.common.misc.CommonAssertions.assertThatType;
+ import com.github.protobufel.test.common.misc.CommonSoftAssertions;
 
  class MyTest {
      
@@ -46,8 +47,6 @@
           
  //...
  }
-
-    // Happy using!
 
 ```
 

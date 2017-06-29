@@ -28,7 +28,7 @@ plugins {
     id 'maven'
     id 'signing'
 
-//    id 'io.codearte.nexus-staging' version "0.9.0"
+    id 'io.codearte.nexus-staging' version "0.9.0"
     id 'net.researchgate.release' version '2.6.0'
 
     //id 'eclipse'
@@ -91,10 +91,10 @@ if (project.hasProperty('ossrhUsername')) {
         }
     }
 
-//    nexusStaging {
-//        //packageGroup = "com.github.protobufel.java-common-test" //optional if packageGroup == project.getGroup()
-//        stagingProfileId = "com.github.protobufel" //when not defined will be got from server using "packageGroup"
-//    }
+    nexusStaging {
+        //packageGroup = "com.github.protobufel.java-common-test" //optional if packageGroup == project.getGroup()
+        stagingProfileId = "com.github.protobufel" //when not defined will be got from server using "packageGroup"
+    }
 
     task sourcesJar(type: Jar) {
         classifier = 'sources'
@@ -110,16 +110,10 @@ if (project.hasProperty('ossrhUsername')) {
         from javadoc
     }
 
-//    javadoc {
-//        finalizedBy = ["copyJavadocToDoc"]
-//    }
-
     task copyJavadocToDoc(type: Sync, group: 'documentation') {
         from javadoc
         into("docs/javadoc")
     }
-
-    //copyJavadocToDoc.onlyIf { project.hasProperty("release") && project.release == 'true' }
 
     artifacts {
         archives javadocJar, sourcesJar
@@ -206,7 +200,6 @@ check.dependsOn jacocoTestReport
 dependencies {
     //api '...'
 
-    //implementation 'junit:junit:4.12'
     implementation 'org.assertj:assertj-core:3.8.0'
 
     // Use JUnit test framework

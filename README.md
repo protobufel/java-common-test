@@ -10,7 +10,7 @@
  // This package provides some common AssertJ assertions and other test utilities.
 
  import static com.github.protobufel.test.common.misc.CommonAssertions.assertThatType;
- import com.github.protobufel.test.common.misc.CommonSoftAssertions;
+ import com.github.protobufel.test.common.misc.CommonJUnitSoftAssertions;
 
  class MyTest {
      
@@ -27,17 +27,9 @@
      }
      
 // or use soft assertions:
-     private CommonSoftAssertions softly;
- 
-     @Before
-     public void setUp() throws Exception {
-        softly = new CommonSoftAssertions();
-     }
- 
-     @After
-     public void tearDown() throws Exception {
-        softly.assertAll();
-     }
+    @Rule
+    public final CommonJunitSoftAssertions softly = new CommonJunitSoftAssertions();
+
      
      @Test
      public void testUtilityClassSoftly() {

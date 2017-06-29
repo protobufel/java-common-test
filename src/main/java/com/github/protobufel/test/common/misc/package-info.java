@@ -17,18 +17,39 @@
 
 /**
  * This package provides some common AssertJ assertions and other test utilities.
- * <p>
- * <pre>
  *
- import static com.github.protobufel.test.common.misc.CommonAssertions;
+ * <p>
+ *
+ * <pre>
+ import static com.github.protobufel.test.common.misc.CommonAssertions.assertThatType;
+ import com.github.protobufel.test.common.misc.CommonJUnitSoftAssertions;
 
  class MyTest {
- ...
+
+ //...
+
  {@literal @}Test
- public void testSomething() {
+ public void testUtilityClass() {
  assertThatType(MyUtilityClass.class).isUtilityClass();
  }
- ...
+
+ {@literal @}Test
+ public void testSomethingElse() {
+ assertThatType(MyNonUtilityClass.class).isNotUtilityClass();
+ }
+
+ // or use soft assertions:
+ {@literal @}Rule
+ public final CommonJunitSoftAssertions softly = new CommonJunitSoftAssertions();
+
+
+ {@literal @}Test
+ public void testUtilityClassSoftly() {
+ softly.assertThatType(MyUtilityClass.class).isUtilityClass();
+ softly.assertThat(true).isTrue();
+ }
+
+ //...
  }
  * </pre>
  *
